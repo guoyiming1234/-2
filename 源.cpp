@@ -1,167 +1,161 @@
-
 #include<iostream>
+#include<string>
+using namespace std;
 #define _CRT_SECURE_NO_WARNINGS
 #include<stdio.h>
 #include<windows.h>
-#include<string>
-using namespace std;
-#define SIZE 80
-class point
+
+class Student
 {
-	double a, b;
+	char name;
+	bool gender;//性别
+	double ID;
+	string research;//研究领域
+	string tutor;//指导教师
+	double score;//入学成绩 常成员变量
+	static double count;  //记录对象个数 
+	static double sum;    //记录总成绩 
+
 public:
-	point();
-	point(double a, double b);
-	point(const point& r);//三构造函数
-	~point();//析构函数
-	double GetX();//提取横坐标
-	double GetY();//提取纵坐标
-	void Display(); //显示信息
-	void SetX(double ax);//修改横坐标
-	void SetY(double bx);//修改纵坐标
-	void SwapPoint(double& a, double& b);//交换坐标值： void SwapPoint(double& ra, double& xb);
-	friend double GetLength(point& A, point& B);//友元函数:计算两点距离
-}point1,point2;
-point::point()
+	Student();
+	Student(char name, double id, bool gender, double score, string research, string tutor);
+	~Student();
+	void Display()const;
+	void display();
+	//void input();
+	void inputscore();//只输入成绩
+	double getsum();  //计算总成绩 
+	static double average(); //获取成绩平均值 
+	static double getcount();  //获取对象个数 
+	friend void dengji(Student& A);//友元函数:计算等级
+};
+double Student::count = 0;
+double Student::sum = 0;
+void Student::inputscore()
 {
-	a = b = 0;
+	cout << "输入成绩：" << endl;
+	cin >> score;
+
 }
-//构造函数
-point::point(double a, double b)
+double Student::getsum()
 {
-	this->a = a;
-	this->b= b;
+	count++;
+	return sum += score;
 }
-point::point(const point& r)
+double Student::average()
 {
-	a = r.a;
-	b = r.b;
+	if (count != 0)
+		return sum / count;
+	else
+		return count;
 }
-point::~point()
+double Student::getcount()
+{
+	return count;
+}
+void Student::display()//采用普通成员函数形式输出研究生的单项基本数据信息;
+{
+
+	cout << "姓  名：" << name << endl;
+	cout << "性  别：" << gender << endl;
+	cout << "学  号：" << ID << endl;
+	cout << "入学成绩：" << score << endl;
+	cout << "研究领域：" << research.c_str() << endl;
+	cout << "指导教师：" << tutor.c_str() << endl;
+}
+void Student::Display()const//采用常成员函数形式输出研究生的单项基本数据信息;
+{
+	
+	cout << "姓  名：" << name << endl;
+	cout << "性  别：" << gender << endl;
+	cout << "学  号：" << ID << endl;
+	cout << "入学成绩：" << score << endl;
+	cout << "研究领域：" << research.c_str() << endl;
+	cout << "指导教师：" << tutor.c_str() << endl;
+}
+Student::Student()
 {
 	
 }
-double point::GetX()
+Student::Student(char name, double id, bool gender, double score,string research, string tutor)
 {
-	cout << "x坐标：" << a << endl;
-	return a;
+	this->name = name;
+	this->ID= id;
+	this->gender = gender;
+	this->score = score;
+	this->research = research;
+	this->tutor = tutor;
 }
-//提取横坐标
-double point::GetY()
+Student::~Student()
 {
-	cout << "y坐标：" << b << endl;
-	return b;
-}
-//提取纵坐标
-void point::Display()
-{
-	cout << "x坐标：" << a<< endl;
-	cout << "y坐标：" << b<< endl;
-}
-//显示信息
-void point::SetX(double ax)
-{
-	this->a = ax;
-}//修改横坐标
-void point::SetY(double ay)
-{
-	this->b  = ay;
-}//修改纵坐标
-void point::SwapPoint(double &a, double &b)
-{
-	int temp; //辅助变量  
-	temp = a;
-	a = b;
-	b = temp;
-	cout << "x坐标：" << a << endl;
-	cout << "y坐标：" << b << endl;
-}
- double GetLength(point& A, point& B)//计算两点距离
-{
-	double x = double(A.a - B.a); //通过对象访问私有数据成员 
-	double y = double(A.b - B.b);
 
-	return double(sqrt(x*x + y * y));
 }
-
-
+/*void Student::input() //学生信息输入 
+{
+	cout << "姓  名：" << endl;
+	cin >> name;
+	cout << "性  别："  << endl;
+	cin >> gender;
+	cout << "学  号："  << endl;
+	cin >> ID;
+	cout << "入学成绩：" << endl;
+	cin >> score;
+	cout << "研究领域："  << endl;
+	cin >> research;
+	cout << "指导教师：" << endl << endl;
+	cin >> tutor;
+}*/
+void dengji(Student& A)//友元函数:计算等级
+{
+	if (A.score >=90)
+		cout << "他的等级为A" << endl;
+	else if((A.score<90)&&(A.score >= 80))
+		cout << "他的等级为B" << endl;
+	else if ((A.score < 80) && (A.score >= 70))
+		cout << "他的等级为C" << endl;
+	else if ((A.score < 70) && (A.score >= 60))
+		cout << "他的等级为D" << endl;
+	if (A.score<60)
+		cout << "他的等级为E" << endl;
+}
 int main()
 {
-	double a, b;
-	int i;
-	cout << "输入x坐标：";
-	cin >> a;
-	cout << "输入y坐标：";
-	cin >> b;
-	point point1(a,b);
-	point1.Display();
-	cout << "坐标是否都正确无误，如果x错误请按1，x错误请按2，无误请按0：";
-	cin >> i;
-	while (i)
-	{
-	
-		if (i = 1)
-		{
-			cout << "输入x坐标：";
-			cin >> a;
-			point1.SetX(a);
-		}
-		else if (i = 2)
-		{
-			cout << "输入y坐标：";
-			cin >> a;
-			point1.SetX(a);
-		}
-		point1.Display();
-		cout << "坐标是否都正确无误，如果x错误请按1，x错误请按2，无误请按0：";
-		cin >> i;
+	cout << "请输入个人信息：" << endl;
+	char name;
+	bool gender;//性别
+	double ID;
+	string research;//研究领域
+	string tutor;//指导教师
+	double score;//入学成绩 
+	cout << "姓  名：" << endl;
+	cin >> name;
+	cout << "性  别：" << endl;
+	cin >> gender;
+	cout << "学  号：" << endl;
+	cin >> ID;
+	cout << "入学成绩：" << endl;
+	cin >> score;
+	cout << "研究领域：" << endl;
+	cin >> research;
+	cout << "指导教师：" << endl << endl;
+	cin >> tutor;
+	Student student1( name,ID,gender, score,research, tutor);
+	student1.Display();
+	student1.display();
 
-	};
-	//修改
-	cout << "  " << endl;
-	cout << "是否需要查询坐标：需要查询x请按1，需要查询y请按2，不需要请按0:";
-	cin >> i;
-	while (i)
-	{
 
-		if (i = 1)
-		{
-	cout << "查询x坐标" << endl;
-	point1.GetX();
-		}
-		else if (i = 2)
-		{
-	cout << "查询y坐标" << endl;
-	point1.GetY();
-		}
-		 i=0;
-
-	};
-	//查询
-	cout << "  " << endl;
-	cout << "是否需要交换x,y坐标值，需要请按1，不需要请按0:";
-	cin >> i;
-	while (i)
+	cout << "有几名同学：" << endl;
+	int n;
+	cin >> n;
+	Student *p = new Student[n];
+	while (n--)
 	{
-		point1.SwapPoint(a,b);
-		i = 0;
+		p->inputscore();
+		p->getsum();
+		dengji( *p);
+		p++;
 	}
-	//交换
-	cout << "  " << endl;
-	cout << "现在进行计算两点之间的距离：";
-		int x1, y1, x2, y2;
-		cout << "请输入第一个点的坐标（x1,y1）： "<<endl;
-		cout << "输入x坐标：";
-		cin >> x1 ;
-		cout << "输入y坐标：";
-		cin >> y1;
-		cout << "请输入第二个点的坐标（x2,y2）： "<<endl;
-		cout << "输入x坐标：";
-		cin >> x2;
-		cout << "输入y坐标：";
-		cin >> y2;
-		point youp1(x1, y1), youp2(x2, y2);
-		cout << "距离为 : " << GetLength(youp1, youp2) << endl;//计算两点间的距离 
+	cout << "平均成绩为=" << Student::average() << endl;
 	system("pause");
 	return 0;
 }
